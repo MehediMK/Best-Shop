@@ -11,7 +11,7 @@ def index(request):
     context = {}
     context['categories'] = Category.objects.all()
     context['products'] = Product.objects.all()
-    context['carousels'] = Carousel.objects.all()
+    context['carousels'] = Carousel.objects.filter(Status=True)
     return render(request,'shop/index.html', context)
 
 def shop(request):
@@ -112,7 +112,7 @@ def cart_item_pop(request,id):
         
 @login_required(login_url='/account/login/')
 def checkout(request):
-    shiping_cost = 500
+    shiping_cost = 50
     if request.method == 'POST':
         if request.user.is_authenticated:
             user = request.user
