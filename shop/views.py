@@ -116,6 +116,7 @@ def checkout(request):
     if request.method == 'POST':
         if request.user.is_authenticated:
             user = request.user
+            total_amount = request.POST.get('total')
             fname = request.POST.get('fname')
             lname = request.POST.get('lname')
             email = request.POST.get('email')
@@ -132,6 +133,14 @@ def checkout(request):
                     discount_price = product.product_price - product.descrount_price
                     order = OrderPlace(user = user,product = product, quantity = cart.get(str(product.id)), fname = fname, lname = lname, email = email, mobile = mobile, address = address, city = city, zip =  zip, total_amout = discount_price, bkashTrxID = bkashTrxID)            
                     order.save()
+                try:
+                    from_email = settings.DEFAULT_FROM_EMAIL
+                    subject = 'Order Placed Confirmation'
+                    message = f'Your TrxID is {bkashTrxID} and phone No. {mobile}.Total Paid :{total_amount}.We will connect you soon.\n Thanks for Shoping'       
+                    send_mail(subject, message, from_email, [email],  fail_silently=False,)
+                    messages.success(request, f"Hello {fname},\nThanks for stay with us!") 
+                except BadHeaderError as error:
+                    messages.error(request, f"{error}") 
                 request.session['cart'] = {}
             return redirect('userprofile')
     
@@ -143,18 +152,14 @@ def contact(request):
         email = request.POST.get('email')    
         subject = request.POST.get('subject')
         message = request.POST.get('message')
-        print(name, email, subject, message)
         if name and email and subject and message:
             ContactUs(name=name, email=email, subject=subject, message=message).save()
-            from_email = settings.DEFAULT_FROM_EMAIL
-            if subject and message and email:
-                try:
-                    send_mail(subject, message, from_email, [email],  fail_silently=False,)
-                    messages.success(request, f"Hello {name},\nThanks for contact with us!") 
-                except BadHeaderError as error:
-                    messages.error(request, f"{error}")                
-            else:
-                messages.error(request,f"Mail Subject or message body or your email error")
+            try:
+                from_email = settings.DEFAULT_FROM_EMAIL            
+                send_mail(subject, message, from_email, [email],  fail_silently=False,)
+                messages.success(request, f"Hello {name},\nThanks for contact with us!") 
+            except BadHeaderError as error:
+                messages.error(request, f"{error}")                
         else:
             messages.error(request,f"Mail Subject or message body or your email error")
                 

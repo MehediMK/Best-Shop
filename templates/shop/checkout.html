@@ -82,7 +82,7 @@
                         <div class="card-footer border-secondary bg-transparent">
                             <div class="d-flex justify-content-between mt-2">
                                 <h5 class="font-weight-bold">Total</h5>
-                                <input hidden type="text" name="total" value="{% if request.session.cart_total_price %}{% total_price_with_shiping_cost request.session.cart_total_price 50 %}{% else %}0{% endif %}">
+                                <input hidden type="text" name="total" value="{% if request.session.cart_total_price %}{% total_price_with_shiping_cost request.session.cart_total_price shiping_cost %}{% else %}0{% endif %}">
                                 <h5 class="font-weight-bold">{% currency_tk %}{% if request.session.cart_total_price %}{% total_price_with_shiping_cost request.session.cart_total_price shiping_cost %}{% else %}0{% endif %}</h5>
                             </div>
                         </div>
