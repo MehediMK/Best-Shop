@@ -40,7 +40,7 @@
                 <h3 class="font-weight-semi-bold">{{product.product_title}}</h3>
                 
                 <div class="d-flex justify-content-start">
-                    <h3>{% currency_tk %} {% discount_amount product.product_price product.descrount_price %}</h3><h6 class="text-muted ml-2"><del>{% currency_tk %}{{product.descrount_price}}</del></h6>
+                    <h3>{% currency_tk %} {% discount_amount product.product_price product.discount_price %}</h3><h6 class="text-muted ml-2"><del>{% currency_tk %}{{product.discount_price}}</del></h6>
                 </div>
                 <p class="mb-4 text-wrap"> <pre>{{product.product_description|description_short}}</pre><br><a href="#description">See more...</a></p>
                 
@@ -124,7 +124,7 @@
                                 <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                                     <h6 class="text-truncate mb-3">{{related_product.product_title}}</h6>
                                     <div class="d-flex justify-content-center">
-                                        <h6>{{related_product.descrount_price}}</h6><h6 class="text-muted ml-2"><del>{{related_product.product_price}}</del></h6>
+                                        <h6>{{related_product.discount_price}}</h6><h6 class="text-muted ml-2"><del>{{related_product.product_price}}</del></h6>
                                     </div>
                                 </div>
                                 <div class="card-footer d-flex justify-content-between bg-light border">

@@ -4,9 +4,9 @@ from .models import (Product, Category, Carousel, OrderPlace,ContactUs)
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['pk', 'user', 'product_title','product_category', 'product_price', 'descrount_price', 'create_date']
+    list_display = ['pk', 'user', 'product_title','product_category', 'product_price', 'discount_price', 'create_date']
     search_fields = ('user', 'product_title','product_category', 'create_date')
-    list_editable = ['product_title','product_price','descrount_price']
+    list_editable = ['product_title','product_price','discount_price']
     list_display_links = ['pk', 'user']
 
 

@@ -17,7 +17,7 @@ class Product(models.Model):
     product_title = models.CharField(max_length=250, blank=False)
     product_image = models.ImageField(upload_to='product_image', blank=False)
     product_price = models.DecimalField(max_digits=6,decimal_places=2)
-    descrount_price = models.DecimalField(max_digits=6,decimal_places=2)
+    discount_price = models.DecimalField(max_digits=6,decimal_places=2)
     product_category = models.ForeignKey('Category', on_delete=models.CASCADE)
     product_description = models.TextField(max_length=600,blank=False)
     create_date = models.DateTimeField(auto_now_add=True)

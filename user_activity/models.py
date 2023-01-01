@@ -32,3 +32,16 @@ class TermsCondition(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+class StoreInfo(models.Model):    
+    about = models.TextField(max_length=2000)
+    address = models.CharField(max_length=200)
+    email = models.EmailField(max_length=60)
+    phone = models.CharField(max_length=20)
+
+    def __str__(self) -> str:
+        return self.address
+    class Meta:
+        verbose_name_plural = 'StoreAddress'
+
+

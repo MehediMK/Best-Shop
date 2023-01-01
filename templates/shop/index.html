@@ -68,33 +68,6 @@
     {% endif %}
 
 
-    <!-- Offer Start -->
-    <div class="container-fluid offer pt-5">
-        <div class="row px-xl-5">
-            <div class="col-md-6 pb-4">
-                <div class="position-relative bg-secondary text-center text-md-right text-white mb-2 py-5 px-5">
-                    <img src=" {% static 'shop/img/offer-1.png' %}" alt="">
-                    <div class="position-relative" style="z-index: 1;">
-                        <h5 class="text-uppercase text-primary mb-3">20% off the all order</h5>
-                        <h1 class="mb-4 font-weight-semi-bold">Spring Collection</h1>
-                        <a href="" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 pb-4">
-                <div class="position-relative bg-secondary text-center text-md-left text-white mb-2 py-5 px-5">
-                    <img src=" {% static 'shop/img/offer-2.png' %}" alt="">
-                    <div class="position-relative" style="z-index: 1;">
-                        <h5 class="text-uppercase text-primary mb-3">20% off the all order</h5>
-                        <h1 class="mb-4 font-weight-semi-bold">Winter Collection</h1>
-                        <a href="" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Offer End -->
-
     {% if products %}
     <!-- Products Start -->
     <div class="container-fluid pt-5">
@@ -115,7 +88,7 @@
                         <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                             <h6 class="text-truncate mb-3 text-wrap">{{product.product_title}}</h6>
                             <div class="d-flex justify-content-center">
-                                <h6>{% currency_tk %} {% discount_amount product.product_price product.descrount_price %}</h6><h6 class="text-muted ml-2"><del>{% currency_tk %} {{product.product_price}}</del></h6>
+                                <h6>{% currency_tk %} {% discount_amount product.product_price product.discount_price %}</h6><h6 class="text-muted ml-2"><del>{% currency_tk %} {{product.product_price}}</del></h6>
                             </div>
                         </div>
                         <div class="card-footer d-flex justify-content-between bg-light border">
@@ -322,7 +295,7 @@
                                 <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                                     <h6 class="text-truncate mb-3">{{product.product_title}}</h6>
                                     <div class="d-flex justify-content-center">
-                                        <h6>{{product.descrount_price}}</h6><h6 class="text-muted ml-2"><del>{{product.product_price}}</del></h6>
+                                        <h6>{{product.discount_price}}</h6><h6 class="text-muted ml-2"><del>{{product.product_price}}</del></h6>
                                     </div>
                                 </div>
                                 <div class="card-footer d-flex justify-content-between bg-light border">

@@ -130,7 +130,7 @@ def checkout(request):
                 cart_keys = [int(key) for key in cart.keys()]
                 products = Product.get_product_by_id(cart_keys)
                 for product in products:
-                    discount_price = product.product_price - product.descrount_price
+                    discount_price = product.product_price - product.discount_price
                     order = OrderPlace(user = user,product = product, quantity = cart.get(str(product.id)), fname = fname, lname = lname, email = email, mobile = mobile, address = address, city = city, zip =  zip, total_amout = discount_price, bkashTrxID = bkashTrxID)            
                     order.save()
                 try:

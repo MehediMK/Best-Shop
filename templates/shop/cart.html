@@ -43,7 +43,7 @@
                             {% for product in products %}                        
                                 <tr>
                                     <td class="d-flex justify-content-start  align-items-center"><img class="mx-2" src=" {{product.product_image.url}} " alt="{{product.product_title}}" style="width: 50px;"><a href="{% url 'product_detail' product.id %}"> {{product.product_title}}</a></td>
-                                    <td class="align-middle text-nowrap">{% currency_tk %}{% product_descrount_price product.id %}</td>
+                                    <td class="align-middle text-nowrap">{% currency_tk %}{% product_discount_price product.id %}</td>
                                     <td class="align-middle">
                                         <div class="input-group mx-auto" style="width: 100px;">
                                             <div class="input-group-btn">
