@@ -22,7 +22,8 @@
             <p>Gender: {{profile.get_gender_display}}</p>
             <p>Address: {{profile.address}}</p>
             <p>Phone No: {{profile.phone}}</p>
-            <a href="{% url 'editUserInfo' %}" class="btn btn-success w-100">Edit</a>
+            <a href="{% url 'editUserInfo' %}" class="btn btn-success w-100">Edit Info</a>
+            <a href="{% url 'password_change' %}" class="btn btn-success w-100">Change password</a>
         </div>
         <div class="col-md-9">
             <div class="row">
