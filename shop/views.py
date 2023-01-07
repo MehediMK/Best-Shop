@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from .models import (Product, Category, Carousel, OrderPlace, ContactUs)
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -7,6 +8,8 @@ from django.conf import settings
 from django.contrib import messages
 from .filter import *
 import stripe
+from django.contrib.sites.models import Site
+
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -122,6 +125,12 @@ def cart_item_pop(request, id):
 @login_required(login_url='/account/login/')
 def checkout(request):
     shiping_cost = 50
+    if request.GET.get('session_id'):
+        session = stripe.checkout.Session.retrieve(request.GET.get('session_id'))
+        customer = stripe.Customer.retrieve(session.customer)
+        if customer:
+            print("get it strip")
+
     if request.method == 'POST':
         if request.user.is_authenticated:
             user = request.user
@@ -159,6 +168,29 @@ def checkout(request):
                     request.session['cart'] = {}
                     
                 return redirect('userprofile')
+            elif payment_system == 'cash':
+                bkashTrxID = request.POST.get('bkashTrxID')
+                if cart:
+                    cart_keys = [int(key) for key in cart.keys()]
+                    products = Product.get_product_by_id(cart_keys)
+                    for product in products:
+                        discount_price = product.product_price - product.discount_price
+                        order = OrderPlace(user=user, product=product, quantity=cart.get(str(product.id)), fname=fname, lname=lname, email=email,
+                                           mobile=mobile, address=address, city=city, zip=zip, total_amout=discount_price, bkashTrxID='Cash_On_delivery')
+                        order.save()
+                    try:
+                        from_email = settings.DEFAULT_FROM_EMAIL
+                        subject = 'Order Placed Confirmation'
+                        message = f'Your TrxID is {bkashTrxID} and phone No. {mobile}.Total Paid :{total_amount}.We will connect you soon.\n Thanks for Shoping'
+                        send_mail(subject, message, from_email, [
+                                  email],  fail_silently=False,)
+                        messages.success(
+                            request, f"Hello {fname},\nThanks for stay with us!")
+                    except BadHeaderError as error:
+                        messages.error(request, f"{error}")
+                    request.session['cart'] = {}
+                    
+                return redirect('userprofile')
             else:
                 if cart:
                     cart_keys = [int(key) for key in cart.keys()]
@@ -168,18 +200,22 @@ def checkout(request):
                         order = OrderPlace(user=user, product=product, quantity=cart.get(str(product.id)), fname=fname, lname=lname, email=email,
                                            mobile=mobile, address=address, city=city, zip=zip, total_amout=discount_price, bkashTrxID='Card_payment')
                         order.save()
+                        product_image =  f"http://{Site.objects.get_current().domain}{str(product.product_image.url)}"
+                        print(product_image)
                         # strip
-                        domain = "https://yourdomain.com"
-                        if settings.DEBUG:
-                            domain = "http://127.0.0.1:8000"
                         checkout_session = stripe.checkout.Session.create(
                             payment_method_types=['card'],
                             line_items=[
                                 {
                                     'price_data': {
-                                        'currency': 'usd',
+                                        'currency': 'bdt',
                                         'product_data': {
                                             'name': product.product_title,
+                                            'description':product.product_description,
+                                            'images': [product_image],
+                                            'metadata': {
+                                                'item_id': product.id, 
+                                            },
                                         },
                                         'unit_amount': int(discount_price * 100),
                                     },
@@ -187,9 +223,10 @@ def checkout(request):
                                 }
                             ],
                             mode='payment',
-                            success_url=domain + '/account/userprofile/',
-                            cancel_url=domain + '/products-cart/',
+                            success_url=request.build_absolute_uri(reverse_lazy('checkout')),
+                            cancel_url=request.build_absolute_uri(reverse_lazy('cartlist')),
                         )
+                    # request.session['cart'] = {}
                 return redirect(checkout_session.url)
 
     return render(request, 'shop/checkout.html', {'shiping_cost': shiping_cost})
